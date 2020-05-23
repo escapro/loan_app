@@ -1,10 +1,12 @@
 import 'package:Loan/CurrencySelector.dart';
+import 'package:Loan/Date.dart';
 import 'package:flutter/material.dart';
 import 'package:Loan/constans.dart';
 import 'components/Components.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class NewLoan extends StatefulWidget {
-
   final int action;
 
   NewLoan({Key key, @required this.action}) : super(key: key);
@@ -16,11 +18,14 @@ class NewLoan extends StatefulWidget {
 class _NewLoanState extends State<NewLoan> {
   String _selectedCurrency;
   int _selectedAction;
+  DateTime _startDate;
+  DateTime _endDate;
 
   @override
   void initState() {
     _selectedCurrency = "AZN";
     _selectedAction = widget.action;
+    _startDate = DateTime.now();
     super.initState();
   }
 
@@ -36,154 +41,175 @@ class _NewLoanState extends State<NewLoan> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 MySection(
-                  title: "Сумма",
-                  subtitle: "Введите сумму и валюту",
-                  divider: true,
-                  body: Row(
-                    children: <Widget>[
-                      Flexible(
-                        flex: 3,
-                        child: MyInput(
-                            placeholder: "К примеру: 150",
-                            margin: EdgeInsets.only(right: 10.0)
+                    title: "Сумма",
+                    subtitle: "Введите сумму и валюту",
+                    divider: true,
+                    body: Row(
+                      children: <Widget>[
+                        Flexible(
+                          flex: 3,
+                          child: MyInput(
+                              placeholder: "К примеру: 150",
+                              margin: EdgeInsets.only(right: 10.0)),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: MyButton(
+                            text: _selectedCurrency,
+                            isActive: false,
+                            textColor: Constans.StdBlack,
+                            onPressed: () => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (oldContext) =>
+                                          CurrencySelector()))
+                            },
                           ),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        child: MyButton(
-                          text: _selectedCurrency,
-                          isActive: false,
-                          textColor: Constans.PrimaryColor,
-                          onPressed: () => {
-                            Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (oldContext) => CurrencySelector()
-                            )
-                            )
-                          },
-                        ),
-                      )
-                    ],
-                  )
-                ),
+                        )
+                      ],
+                    )),
                 MySection(
-                  title: "Действие",
-                  subtitle: "Выберите один из действий",
-                  divider: true,
-                  body: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 4,
-                        child: MyButton(
-                          text: "Взял в долг",
-                          isActive: _selectedAction == 1 ? true : false,
-                          onPressed: () => {
-                            setState(() {
-                              _selectedAction = 1;
-                            })
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Icon(Icons.compare_arrows, size: 30, color: Constans.Grey)
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: MyButton(
-                          text: "Дал в долг",
-                          isActive: _selectedAction == 2 ? true : false,
-                          onPressed: () => {
-                             setState(() {
-                              _selectedAction = 2;
-                            })
-                          },
-                        ),
-                      ),
-                    ],
-                  )
-                ),
-                MySection(
-                  title: "Контакты",
-                  subtitle: "Укажите контакты",
-                  infoText: "Можно выбирать несколько контактов",
-                  divider: true,
-                  body: Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: MyButton(
-                          widget: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(right: 5.0),
-                                child: Icon(Icons.add_circle),
-                              ),
-                              Text("Добавить контакт", style: TextStyle(fontSize: 17))
-                            ],
+                    title: "Действие",
+                    subtitle: "Выберите один из действий",
+                    divider: true,
+                    body: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 3,
+                          child: MyButton(
+                            text: "Взял в долг",
+                            isActive: _selectedAction == 1 ? true : false,
+                            onPressed: () => {
+                              setState(() {
+                                _selectedAction = 1;
+                              })
+                            },
                           ),
-                          onPressed: () => {},
                         ),
-                      ),
-                    ],
-                  )
-                ),
+                        Expanded(
+                            flex: 1,
+                            child: Icon(Icons.compare_arrows,
+                                size: 30, color: Constans.Grey)),
+                        Expanded(
+                          flex: 3,
+                          child: MyButton(
+                            text: "Дал в долг",
+                            isActive: _selectedAction == 2 ? true : false,
+                            onPressed: () => {
+                              setState(() {
+                                _selectedAction = 2;
+                              })
+                            },
+                          ),
+                        ),
+                      ],
+                    )),
                 MySection(
-                  title: "Дата",
-                  subtitle: "Выберите промежуток дейстия долга",
-                  infoText: "Можно выбирать дату начала и дату конца дейсвтия долга",
-                  divider: true,
-                  body: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 4,
-                        child: MyButton(
-                          text: "Сегодня",
-                          isActive: true,
-                          onPressed: () => {
-                           
-                          },
+                    title: "Контакты",
+                    subtitle: "Укажите контакты",
+                    infoText: "Можно выбирать несколько контактов",
+                    divider: true,
+                    body: Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: MyButton(
+                            widget: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 5.0),
+                                  child: Icon(
+                                    Icons.add_circle,
+                                    size: 20,
+                                  ),
+                                ),
+                                Text("Добавить контакт",
+                                    style: TextStyle(fontSize: 15))
+                              ],
+                            ),
+                            onPressed: () => {},
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Icon(Icons.arrow_forward, size: 30, color: Constans.Grey)
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: MyButton(
-                          text: "Укажите дату",
-                          isActive: false,
-                          onPressed: () => {
-                             setState(() {
-                               
-                            })
-                          },
-                        ),
-                      ),
-                    ],
-                  )
-                ),
+                      ],
+                    )),
                 MySection(
-                  title: "Комментарий",
-                  subtitle: "Введите заметку к записи",
-                  infoText: "Необязательное поле",
-                  body: Row(
-                    children: <Widget>[
-                      Flexible(
-                        flex: 1,
-                        child: MyInput(
+                    title: "Дата",
+                    subtitle: "Выберите промежуток дейстия долга",
+                    infoText:
+                        "Можно выбирать дату начала и дату конца действия долга",
+                    divider: true,
+                    body: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 3,
+                          child: MyButton(
+                            text: _startDate == null
+                                  ? "Укажите дату"
+                                  : Date.format(_startDate),
+                            isActive: true,
+                            onPressed: () => {
+                              Date.showPicker(
+                                context: context,
+                                initialDate: _startDate,
+                                lastDate: _endDate,
+                                callable: (pickedDate) => {
+                                  if (pickedDate != null) {
+                                    setState(() {
+                                      _startDate = pickedDate;
+                                    })
+                                  },
+                                }
+                              )
+                            },
+                          ),
+                        ),
+                        Expanded(
+                            flex: 1,
+                            child: Icon(Icons.arrow_forward,
+                                size: 30, color: Constans.Grey)),
+                        Expanded(
+                          flex: 3,
+                          child: MyButton(
+                              text: _endDate == null
+                                  ? "Укажите дату"
+                                  : Date.format(_endDate),
+                              isActive: _endDate == null ? false : true,
+                              onPressed: () => {
+                                Date.showPicker(
+                                  context: context,
+                                  initialDate: _endDate != null ? _endDate : _startDate,
+                                  firstDate: _startDate,
+                                  callable: (pickedDate) => {
+                                    if (pickedDate != null) {
+                                      setState(() {
+                                        _endDate = pickedDate;
+                                      })
+                                    },
+                                  }
+                                )
+                              }),
+                        ),
+                      ],
+                    )),
+                MySection(
+                    title: "Комментарий",
+                    subtitle: "Введите заметку к записи",
+                    infoText: "Необязательное поле",
+                    body: Row(
+                      children: <Widget>[
+                        Flexible(
+                          flex: 1,
+                          child: MyInput(
                             placeholder: "Заметка к записи долга",
                             maxLines: 4,
                           ),
-                      )
-                    ],
-                  )
-                )
+                        )
+                      ],
+                    ))
               ],
             )),
       ),

@@ -46,7 +46,7 @@ class MyButton extends StatelessWidget {
       margin: margin != null ? margin : null,
       child: (RaisedButton(
         onPressed: () {onPressed();},
-        child: widget == null ? Text(text, style: TextStyle(fontSize: 17)) : widget,
+        child: widget == null ? Text(text, style: TextStyle(fontSize: 15)) : widget,
         color: isActive ? Constans.PrimaryColor : Constans.UltraLightGrey,
         textColor: textColor == null ? isActive ? Colors.white : Constans.Grey : textColor,
         elevation: 0,
@@ -93,7 +93,7 @@ class MySection extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 2.0),
                   child: Text(title,
                       style: TextStyle(
-                          fontSize: 27,
+                          fontSize: 25,
                           fontWeight: FontWeight.w600,
                           color: Constans.StdBlack)),
                 ),
@@ -102,7 +102,7 @@ class MySection extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: Text(
                       subtitle,
-                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                      style: TextStyle(fontSize: 17, color: Colors.grey),
                     ),
                   ),
               ],
@@ -145,7 +145,7 @@ class MyInput extends StatelessWidget {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
             contentPadding: EdgeInsets.symmetric(
-              horizontal: 15, vertical: 10
+              horizontal: 13, vertical: 10
             ),
             hintText: placeholder,
             hintStyle: TextStyle(color: Constans.LightGrey),
