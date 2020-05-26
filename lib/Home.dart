@@ -14,11 +14,12 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: isEmpty == true
-          ? EmptyLoan()
+          ? const EmptyLoan()
           : Container(
             child: ListView.builder(
               itemCount: items.length,
-              padding: EdgeInsets.only(bottom: 80),
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.only(bottom: 80),
               itemBuilder: (context, index) {
                 return LoanItem();
               },

@@ -6,7 +6,7 @@ class MyAppBar extends StatelessWidget {
   final String title;
   final body;
 
-  MyAppBar({Key key, @required this.title, @required this.body}) : super(key: key);
+  const MyAppBar({Key key, @required this.title, @required this.body}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +14,13 @@ class MyAppBar extends StatelessWidget {
       Scaffold(
         appBar: AppBar(
           title:
-              Text(title, style: TextStyle(color: Constans.StdBlack)),
+              Text(title, style: const TextStyle(color: Constans.StdBlack)),
           elevation: 0,
-          shape: Border(bottom: BorderSide(color: Constans.UltraLightGrey)),
-          iconTheme: IconThemeData(
+          shape: const Border(bottom: const BorderSide(color: Constans.UltraLightGrey)),
+          iconTheme: const IconThemeData(
             color: Constans.PrimaryColor
           ),
-          centerTitle: true,
+          // centerTitle: true,
           backgroundColor: Colors.white,
         ),
         body: body
@@ -36,23 +36,25 @@ class MyButton extends StatelessWidget {
   final Function onPressed;
   final bool isActive;
   final Color textColor;
+  final Color backgroundColor;
   final EdgeInsetsGeometry margin;
 
-  MyButton({Key key, this.text, @required this.onPressed, this.widget, this.margin, this.textColor, this.isActive = true}) : super(key: key);
+  const MyButton({Key key, this.text, @required this.onPressed, this.backgroundColor, this.widget, this.margin, this.textColor, this.isActive = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 45,
       margin: margin != null ? margin : null,
       child: (RaisedButton(
-        onPressed: () {onPressed();},
-        child: widget == null ? Text(text, style: TextStyle(fontSize: 15)) : widget,
-        color: isActive ? Constans.PrimaryColor : Constans.UltraLightGrey,
+        onPressed: onPressed,
+        child: widget == null ? Text(text, style: const TextStyle(fontSize: 15)) : widget,
+        color: backgroundColor == null ? isActive ? Constans.PrimaryColor : Constans.UltraLightGrey : backgroundColor,
         textColor: textColor == null ? isActive ? Colors.white : Constans.Grey : textColor,
         elevation: 0,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
         shape: RoundedRectangleBorder(
-          borderRadius: new BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(10.0),
         ),
       )),
     );
@@ -67,17 +69,17 @@ class MySection extends StatelessWidget {
   final bool divider;
   final String infoText;
 
-  MySection({Key key, @required this.title, this.infoText, this.subtitle, this.body, this.divider=false}) : super(key: key);
+  const MySection({Key key, @required this.title, this.infoText, this.subtitle, this.body, this.divider=false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return (Container(
-      margin: EdgeInsets.only(bottom: 20),
-      padding: EdgeInsets.only(bottom: 20),
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         border: Border(
           bottom: divider ?
-           BorderSide(width: 1, color: Constans.UltraLightGrey)
+           const BorderSide(width: 1, color: Constans.UltraLightGrey)
            : BorderSide.none
         )
       ),
@@ -85,14 +87,14 @@ class MySection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            margin: subtitle == null ? EdgeInsets.only(bottom: 10) : null,
+            margin: subtitle == null ? const EdgeInsets.only(bottom: 10) : null,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(bottom: 2.0),
                   child: Text(title,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w600,
                           color: Constans.StdBlack)),
@@ -102,17 +104,17 @@ class MySection extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: Text(
                       subtitle,
-                      style: TextStyle(fontSize: 17, color: Colors.grey),
+                      style: const TextStyle(fontSize: 17, color: Colors.grey),
                     ),
                   ),
               ],
             ),
           ),
-          if (body != null) body,
+          if (body != null) Container(child: body),
           if (infoText != null)
           Container(
-            margin: EdgeInsets.only(top: 10),
-            child: Text(infoText, style: TextStyle(fontSize: 15, color: Constans.Grey)),
+            margin: const EdgeInsets.only(top: 10),
+            child: Text(infoText, style: const TextStyle(fontSize: 15, color: Constans.Grey)),
           )
         ],
       ),
@@ -125,56 +127,40 @@ class MyInput extends StatelessWidget {
   final String placeholder;
   final int maxLines;
   final EdgeInsetsGeometry margin;
+  final Function onChanged;
+  final TextInputType keyboardType;
 
-  MyInput({Key key, @required this.placeholder, this.margin, this.maxLines}) : super(key: key);
+  const MyInput({Key key, @required this.placeholder, this.keyboardType, this.margin, this.onChanged, this.maxLines}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: margin,
+      height: maxLines == 1 || maxLines == null ? 45 : null,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Constans.UltraLightGrey),
+        borderRadius: BorderRadius.all(Radius.circular(10)),  
+        color: Constans.UltraLightGrey),
       child: (
         TextField(
           maxLines: maxLines,
+          keyboardType: keyboardType == null ? TextInputType.text : keyboardType,
           decoration: InputDecoration(
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: 13, vertical: 10
-            ),
             hintText: placeholder,
-            hintStyle: TextStyle(color: Constans.LightGrey),
+            hintStyle: const TextStyle(color: Constans.LightGrey),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 10, vertical: 10
+            ),
           ),
+          onChanged: (value) {
+            onChanged(value);
+          },
         )
       ),
-    );
-  }
-}
-
-class MySelectButton extends StatelessWidget {
-  
-  final String text;
-  final Function onPressed;
-
-  MySelectButton({Key key, @required this.text, this.onPressed}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return (
-      Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Constans.UltraLightGrey),
-        child: FlatButton(
-          child: Text(text, style: TextStyle(fontSize: 17),),
-          onPressed: () => onPressed(),
-        )
-      )
     );
   }
 }

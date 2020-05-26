@@ -50,7 +50,7 @@ class Date{
         break;
     }
 
-    if(DateFormat('dd').format(tm) == DateFormat('dd').format(DateTime.now())) {
+    if(DateFormat('dd-MM-yy').format(tm) == DateFormat('dd-MM-yy').format(DateTime.now())) {
       result = "Сегодня";
     }else {
       result = '$day $month, $year';
@@ -59,18 +59,58 @@ class Date{
     return result;
   }
 
-  static void showPicker({context, DateTime initialDate, DateTime firstDate, DateTime lastDate, Function callable}) {
+  static void showPicker({context, int type=0, DateTime initialDate, DateTime firstDate, DateTime lastDate, Function callable}) {
     
-    Duration infinity = Duration(days: 30 * 12 * 100);
+    int infDays = 30 * 12 * 100;
+
+    DateTime infinityBefore = DateTime.now().add(Duration(days: infDays * -1));
+    DateTime infinityAfter = DateTime.now().add(Duration(days: infDays));
+
+    DateTime now = DateTime.now();
+
+    DateTime _initialDate;
+    DateTime _firstDate;
+    DateTime _lastDate;
+
+    if(initialDate != null) {
+      _initialDate = initialDate;
+    }else {
+      if(type == 1) {
+        _initialDate = now;
+      }else if(type == 2) {
+        _initialDate = now;
+      }
+    }
+
+    if(firstDate != null) {
+      _firstDate = firstDate;
+    }else {
+      if(type == 1) {
+        _firstDate = infinityBefore;
+      }else if(type == 2) {
+        _firstDate = now;
+      }
+    }
+
+    if(lastDate != null) {
+      _lastDate = lastDate;
+    }else {
+      if(type == 1) {
+        _lastDate = now;
+      }else if(type == 2) {
+        _lastDate = infinityAfter;
+      }
+    }
 
     showDatePicker(
       context: context,
       cancelText: "Отмена",
       confirmText: "Добавить",
       helpText: "Укажите дату",
-      initialDate: initialDate == null ? DateTime.now() : initialDate,
-      firstDate: firstDate == null ? DateTime.now() : firstDate,
-      lastDate: lastDate == null ? DateTime.now().add(infinity) : lastDate,
+      initialEntryMode: DatePickerEntryMode.calendar,
+      initialDate: _initialDate,
+      firstDate: _firstDate,
+      lastDate:_lastDate
     ).then((pickedDate) => {
           callable(pickedDate)
       });

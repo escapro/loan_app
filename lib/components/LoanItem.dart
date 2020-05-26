@@ -9,8 +9,8 @@ class LoanItem extends StatelessWidget {
     return (
       Container(
         child: _item(),
-        padding: EdgeInsets.all(15),
-        margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+        padding: const EdgeInsets.all(15),
+        margin: const EdgeInsets.only(left: 15, right: 15, top: 20),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -19,7 +19,7 @@ class LoanItem extends StatelessWidget {
               color: Colors.grey.withOpacity(0.2),
               spreadRadius: 1,
               blurRadius: 6,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3), // changes position of shadow
             ),
           ],
         ),
@@ -31,29 +31,29 @@ class LoanItem extends StatelessWidget {
     return Column(
       children: <Widget>[
         Container(
-          margin: EdgeInsets.only(bottom: 10),
+          margin: const EdgeInsets.only(bottom: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text("Андрей", style: TextStyle(fontSize: 15),),
-              Text("Создан сегодня")
+            children: const <Widget>[
+              const Text("Андрей", style: const TextStyle(fontSize: 15),),
+              const Text("Создан сегодня")
             ],
           ),
         ),
         Container(
-          margin: EdgeInsets.only(bottom: 10),
+          margin: const EdgeInsets.only(bottom: 10),
           child: Column(
-            children: <Widget>[
-              Padding(
+            children: const <Widget>[
+              const Padding(
                 padding: const EdgeInsets.only(bottom: 5),
-                child: Text("Взял в долг", style: TextStyle(fontSize: 17)),
+                child: const Text("Взял в долг", style: const TextStyle(fontSize: 17)),
               ),
-              Text("150 AZN", style: TextStyle(fontSize: 25)),
+              const Text("150 AZN", style: const TextStyle(fontSize: 25)),
             ],
           ),
         ),
-        Text("Проход продолжает видеть частое использование, с Lorem Ipsum текст часто появляются в печати ...",
-          style: TextStyle(color: Constans.LightGrey))
+        const Text("Проход продолжает видеть частое использование, с Lorem Ipsum текст часто появляются в печати ...",
+          style: const TextStyle(color: Constans.LightGrey))
       ],
     );
   }
