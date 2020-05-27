@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 class MyAppBar extends StatelessWidget {
 
   final String title;
-  final body;
+  final Widget body;
+  final List<Widget> actions;
+  final Widget floatingActionButton;
+  final FloatingActionButtonLocation floatingActionButtonLocation;
 
-  const MyAppBar({Key key, @required this.title, @required this.body}) : super(key: key);
+  const MyAppBar({Key key, @required this.title, @required this.body, this.actions, this.floatingActionButtonLocation, this.floatingActionButton}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +20,16 @@ class MyAppBar extends StatelessWidget {
               Text(title, style: const TextStyle(color: Constans.StdBlack)),
           elevation: 0,
           shape: const Border(bottom: const BorderSide(color: Constans.UltraLightGrey)),
+          actions: actions,
           iconTheme: const IconThemeData(
             color: Constans.PrimaryColor
           ),
           // centerTitle: true,
           backgroundColor: Colors.white,
         ),
-        body: body
+        body: body,
+        floatingActionButton: floatingActionButton,
+        floatingActionButtonLocation: floatingActionButtonLocation,
       )
     );
   }
@@ -38,8 +44,9 @@ class MyButton extends StatelessWidget {
   final Color textColor;
   final Color backgroundColor;
   final EdgeInsetsGeometry margin;
+  final double fontSize;
 
-  const MyButton({Key key, this.text, @required this.onPressed, this.backgroundColor, this.widget, this.margin, this.textColor, this.isActive = true}) : super(key: key);
+  const MyButton({Key key, this.text, @required this.onPressed, this.fontSize, this.backgroundColor, this.widget, this.margin, this.textColor, this.isActive = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +55,7 @@ class MyButton extends StatelessWidget {
       margin: margin != null ? margin : null,
       child: (RaisedButton(
         onPressed: onPressed,
-        child: widget == null ? Text(text, style: const TextStyle(fontSize: 15)) : widget,
+        child: widget == null ? Text(text, style: TextStyle(fontSize: fontSize == null ? 15 : fontSize)) : widget,
         color: backgroundColor == null ? isActive ? Constans.PrimaryColor : Constans.UltraLightGrey : backgroundColor,
         textColor: textColor == null ? isActive ? Colors.white : Constans.Grey : textColor,
         elevation: 0,

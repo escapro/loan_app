@@ -1,10 +1,19 @@
+import 'package:Loan/ContactList.dart';
+import 'package:Loan/ExistingContacts.dart';
 import 'package:Loan/components/Components.dart';
 import 'package:Loan/constans.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ContactModal {
-  static contactModalSheet(BuildContext context) {
+  
+  Function callback;
+  String newContactName;
+
+  ContactModal({BuildContext context, Function callback}) {
+
+    this.callback = callback;
+
     showMaterialModalBottomSheet(
         context: context,
         enableDrag: true,
@@ -16,20 +25,42 @@ class ContactModal {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 ListTile(
-                  leading: Icon(Icons.add),
-                  title: Text("Добавить новый"),
+                  leading: const Icon(Icons.add),
+                  title: const Text("Добавить новый"),
                   onTap: () => {
                     Navigator.of(context).pop(),
-                    _addNewUser(context),
+                    addNewUser(context),
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.contacts),
-                  title: Text("Из телефонной книги"),
+                  leading: const Icon(Icons.contacts),
+                  title: const Text("Из телефонной книги"),
+                  onTap: () => {
+                    Navigator.of(context).pop(),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (oldContext) => ContactList(
+                          callback: this.contactListCallback
+                        )
+                      )
+                    )
+                  },
                 ),
                 ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text("Из существующих"),
+                  leading: const Icon(Icons.person),
+                  title: const Text("Из существующих"),
+                  onTap: () => {
+                    Navigator.of(context).pop(),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (oldContext) => ExistingContacts(
+                          callback: this.existingContactsCallback
+                        )
+                      )
+                    )
+                  },
                 )
               ],
             ),
@@ -37,23 +68,37 @@ class ContactModal {
         });
   }
 
-  static _addNewUser(context) {
+  void contactListCallback(String name, int type) {
+    newContactName=name;
+    this.callback([newContactName, 2], type);
+    newContactName=null;
+  }
+
+  void existingContactsCallback(String name, int type) {
+    newContactName=name;
+    this.callback([newContactName, 1], type);
+    newContactName=null;
+  }
+
+  addNewUser(context) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Введите имя"),
+            title: const Text("Введите новый контакт"),
             actions: <Widget>[
               FlatButton(
-                child: Text('Отмена', style: TextStyle(color: Constans.Grey)),
+                child: const Text('Отмена', style: const TextStyle(color: Constans.Grey)),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
                FlatButton(
-                child: Text('Добавить', style: TextStyle(color: Constans.PrimaryColor)),
+                child: const Text('Добавить', style: const TextStyle(color: Constans.PrimaryColor)),
                 onPressed: () {
                   Navigator.of(context).pop();
+                  this.callback([newContactName, 1], 1);
+                  newContactName=null;
                 },
               ),
             ],
@@ -61,10 +106,12 @@ class ContactModal {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  MyInput(
-                    placeholder: "Имя и фамилия",
+                  TextField(
+                    decoration: InputDecoration(
+                      labelText: "Имя и фамилия"
+                    ),
                     onChanged: (value) => {
-                      print(value)
+                      newContactName=value
                     },
                   )
                 ],

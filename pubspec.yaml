@@ -33,6 +33,8 @@ dependencies:
 
   flutter_date_pickers: ^0.0.6
   modal_bottom_sheet: ^0.1.6+1
+  permission_handler: ^5.0.0+hotfix.6
+  contacts_service: ^0.4.6
 
 dev_dependencies:
   flutter_test:

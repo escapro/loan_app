@@ -12,5 +12,5 @@ class Constans {
   static const Grey =  Colors.grey;
   static const LightGrey =  Color(0xFFA6A6A6);
   static const UltraLightGrey =  Color(0xFFE9E8ED);
-  static const MegaUltraLightGrey =  Color(0xFFF5F4F9);
+  static const MegaUltraLightGrey =  Color(0xFFF6F5FA);
 }
