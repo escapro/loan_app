@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 void main() => (Constans());
 
 class Constans {
+  static const AppTitle = "Мои долги";
+
   static const PrimaryColor =  Colors.indigo;
   // static const PrimaryColor =  Color(0xFF481380);
   static const AccentColor =  Colors.indigoAccent;

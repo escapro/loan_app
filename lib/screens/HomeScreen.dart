@@ -17,6 +17,7 @@ class HomeScreen extends StatelessWidget {
           primaryColor: Constans.PrimaryColor,
           accentColor: Constans.AccentColor,
           splashColor: Colors.transparent,
+          accentColorBrightness: Brightness.light
         ),
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
@@ -36,7 +37,7 @@ class HomeScreen extends StatelessWidget {
                       (BuildContext context, bool innerBoxIsScrolled) {
                     return <Widget>[
                       SliverAppBar(
-                        title: const Text('Мои долги',
+                        title: const Text(Constans.AppTitle,
                             style: const TextStyle(color: Constans.StdBlack)),
                         elevation: 0.0,
                         // centerTitle: true,
@@ -49,16 +50,42 @@ class HomeScreen extends StatelessWidget {
                             bottom: const BorderSide(color: Constans.UltraLightGrey)),
                         actions: <Widget>[
                           IconButton(
-                            icon: const Icon(Icons.add_circle,
-                                size: 30, color: Constans.PrimaryColor),
-                            onPressed: () {
+                            icon: const Icon(Icons.search,
+                                size: 27, color: Constans.PrimaryColor),
+                            onPressed: () => {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (oldContext) => NewLoan(
                                           action: 1,
                                         )),
-                              );
+                              )
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.info_outline,
+                                size: 27, color: Constans.PrimaryColor),
+                            onPressed: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (oldContext) => NewLoan(
+                                          action: 1,
+                                        )),
+                              )
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add_circle,
+                                size: 27, color: Constans.PrimaryColor),
+                            onPressed: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (oldContext) => NewLoan(
+                                          action: 1,
+                                        )),
+                              )
                             },
                           ),
                         ],

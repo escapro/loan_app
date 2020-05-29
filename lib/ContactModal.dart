@@ -17,6 +17,9 @@ class ContactModal {
     showMaterialModalBottomSheet(
         context: context,
         enableDrag: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+        ),
         isDismissible: true,
         duration: const Duration(milliseconds: 200),
         builder: (context, scrollController) {
@@ -60,6 +63,14 @@ class ContactModal {
                         )
                       )
                     )
+                  },
+                ),
+                Divider(color: Constans.Grey),
+                ListTile(
+                  leading: const Icon(Icons.close),
+                  title: const Text("Закрыть"),
+                  onTap: () => {
+                    Navigator.of(context).pop(),
                   },
                 )
               ],
@@ -108,7 +119,8 @@ class ContactModal {
                 children: <Widget>[
                   TextField(
                     decoration: InputDecoration(
-                      labelText: "Имя и фамилия"
+                      labelText: "Имя и фамилия",
+                      contentPadding: EdgeInsets.all(0),
                     ),
                     onChanged: (value) => {
                       newContactName=value

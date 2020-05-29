@@ -16,14 +16,17 @@ class Home extends StatelessWidget {
       child: isEmpty == true
           ? const EmptyLoan()
           : Container(
-            child: ListView.builder(
-              itemCount: items.length,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.only(bottom: 80),
-              itemBuilder: (context, index) {
-                return LoanItem();
-              },
+            child: Scrollbar(
+              child: ListView.builder(
+                cacheExtent: 100,
+                itemCount: items.length,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.only(bottom: 80),
+                itemBuilder: (context, index) {
+                  return LoanItem();
+                },
            ),
+            ),
           )
     );
   }

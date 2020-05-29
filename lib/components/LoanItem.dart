@@ -19,9 +19,9 @@ class LoanItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
+              color: Constans.UltraLightGrey.withOpacity(0.6),
               spreadRadius: 1,
-              blurRadius: 6,
+              blurRadius: 4,
               offset: const Offset(0, 3), // changes position of shadow
             ),
           ],

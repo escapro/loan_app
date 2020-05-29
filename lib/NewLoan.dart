@@ -24,8 +24,14 @@ class _NewLoanState extends State<NewLoan> {
   String _comment;
   BuildContext _context;
 
+  bool _amountDot;
+
+  TextEditingController _amountController = TextEditingController();
+
   @override
   void initState() {
+    super.initState();
+
     _selectedCurrency = "AZN";
     _selectedAction = widget.action;
     _startDate = DateTime.now();
@@ -36,7 +42,14 @@ class _NewLoanState extends State<NewLoan> {
       4: ["Emily", 1],
       5: ["Bryan", 1],
     };
-    super.initState();
+
+    _amountDot=false;
+  }
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    super.dispose();
   }
 
   void currencyCallback(String currency) {
@@ -83,14 +96,21 @@ class _NewLoanState extends State<NewLoan> {
 
     _contacts.forEach((key, value) {
       list.add(
-        Chip(
-          padding: const EdgeInsets.all(10.0),
-          onDeleted: () {
-            setState(() {
-              _contacts.remove(key);
-            });
-          },
-          label: Text(value[0].toString(), style: const TextStyle(color: Constans.StdBlack, fontSize: 16))
+        Container(
+          child: Chip(
+            padding: const EdgeInsets.all(15.0),
+            backgroundColor: Constans.MegaUltraLightGrey,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular((10))
+              )
+            ),
+            onDeleted: () {
+              setState(() {
+                _contacts.remove(key);
+              });
+            },
+            label: Text(value[0].toString(), style: const TextStyle(color: Constans.StdBlack, fontSize: 16))
+          ),
         )
       );
     });
@@ -101,7 +121,8 @@ class _NewLoanState extends State<NewLoan> {
         top: 10,
       ),
       child: Wrap(
-        spacing: 5.0,
+        spacing: 10.0,
+        runSpacing: 10.0,
         alignment: WrapAlignment.start,
         children: list,
       ));
@@ -111,16 +132,15 @@ class _NewLoanState extends State<NewLoan> {
   Widget build(BuildContext context) {
     return (MyAppBar(
       title: "Новый долг",
-      body: SingleChildScrollView(
+      body: Scrollbar(
         child: SafeArea(
           child: Container(
               color: Colors.white,
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: ListView(
+                padding: const EdgeInsets.all(15),
                 children: <Widget>[
                   MySection(
-                      title: "Сумма",
+                      title: 'Сумма',
                       subtitle: "Введите сумму и укажите валюту",
                       divider: true,
                       body: Row(
@@ -128,10 +148,28 @@ class _NewLoanState extends State<NewLoan> {
                           Flexible(
                             flex: 3,
                             child: MyInput(
-                                placeholder: "К примеру: 150",
-                                margin: const EdgeInsets.only(right: 10.0),
-                                keyboardType: TextInputType.number,
-                                onChanged: this.amountCallback),
+                              controller: _amountController,
+                              placeholder: "К примеру: 150",
+                              maxLenght: 11,
+                              suffixIcon: 
+                              _amountController.text != '' ?
+                              InkWell(
+                                child: Icon(Icons.add, color: Constans.LightGrey),
+                                onTap: () {
+                                  String value = _amountController.text;
+                                  value += '+';
+
+                                  _amountController.value = TextEditingValue(
+                                    text: value,
+                                    selection: TextSelection.fromPosition(
+                                      TextPosition(offset: value.length),
+                                    ),
+                                  );
+                                },
+                              ) : null,
+                              margin: const EdgeInsets.only(right: 10.0),
+                              keyboardType: TextInputType.number,
+                              onChanged: amountListener),
                           ),
                           Flexible(
                             flex: 1,
@@ -140,8 +178,7 @@ class _NewLoanState extends State<NewLoan> {
                               isActive: false,
                               textColor: Constans.StdBlack,
                               onPressed: () => {
-                                FocusScope.of(context)
-                                    .requestFocus(new FocusNode()),
+                                unfocus(),
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -166,6 +203,7 @@ class _NewLoanState extends State<NewLoan> {
                               text: "Взял в долг",
                               isActive: _selectedAction == 1 ? true : false,
                               onPressed: () => {
+                                unfocus(),
                                 setState(() {
                                   _selectedAction = 1;
                                 })
@@ -182,6 +220,7 @@ class _NewLoanState extends State<NewLoan> {
                               text: "Дал в долг",
                               isActive: _selectedAction == 2 ? true : false,
                               onPressed: () => {
+                                unfocus(),
                                 setState(() {
                                   _selectedAction = 2;
                                 })
@@ -215,6 +254,7 @@ class _NewLoanState extends State<NewLoan> {
                               ),
                               onPressed: ()
                                   {
+                                    unfocus();
                                     this._context=context;
                                     return ContactModal(
                                       context: context,
@@ -244,6 +284,7 @@ class _NewLoanState extends State<NewLoan> {
                               isActive: true,
                               fontSize: 13,
                               onPressed: () => {
+                                unfocus(),
                                 Date.showPicker(
                                     context: context,
                                     type: 1,
@@ -273,6 +314,7 @@ class _NewLoanState extends State<NewLoan> {
                                 isActive: _endDate == null ? false : true,
                                 fontSize: 13,
                                 onPressed: () => {
+                                  unfocus(),
                                       Date.showPicker(
                                           context: context,
                                           type: 2,
@@ -306,6 +348,7 @@ class _NewLoanState extends State<NewLoan> {
                             child: MyInput(
                               placeholder: "Заметка к записи долга",
                               maxLines: 4,
+                              onTap: () => unfocus(action: false),
                               onChanged: this.commentCallback,
                             ),
                           )
@@ -338,7 +381,122 @@ class _NewLoanState extends State<NewLoan> {
     ));
   }
 
+  void unfocus({bool action=true}) {
+    if(action == true) {
+      FocusScope.of(context).requestFocus(new FocusNode());
+    }
+   
+    // amountUnfocus();
+  }
+
+  void amountUnfocus() {
+
+    var value = _amountController.text;
+    var filteredValue='';
+
+    var plusSlpitValue = value.split("+");
+
+    if(plusSlpitValue.length > 1) {
+      plusSlpitValue.forEach((valueItem) {
+        amountListener(valueItem);
+        // double a = double.parse(amountUnfocusFilter(valueItem));
+        // double b = double.parse(filteredValue);
+        // print(b);
+        filteredValue += valueItem;
+      });
+    }else {
+      amountListener(value);
+      filteredValue = amountUnfocusFilter(value);
+    }
+
+    _amountController.value = TextEditingValue(
+      text: filteredValue,
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: filteredValue.length),
+      ),
+    );
+  }
+
+  amountUnfocusFilter(value) {
+    var filteredValue = value;
+    if(_amountDot) {
+      if(value.split(".")[1] == '00') {
+        filteredValue = value.replaceAll('.00', '');
+      }else if(value.split(".")[1] == '0') {
+        filteredValue = value.replaceAll('.0', '');
+      }else if(value.split("").last == '.') {
+        filteredValue = value.replaceAll('.', '');
+      }else if(value.split(".")[1].split("").last == '0') {
+        filteredValue = value.substring(0, value.length-1);
+      }
+    }
+    return filteredValue;
+  }
+
+  void amountListener(String v) {
+
+    var value = v;
+    var filteredValue = '';
+
+    if(value[0] == '.' || value[0] == ',') {
+      return;
+    }
+
+    filteredValue=_checkNumber();
+
+    _amountController.value = TextEditingValue(
+      text: filteredValue,
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: filteredValue.length),
+      ),
+    );
+  }
+
+  _checkNumber() {
+    String value = _amountController.text;
+    String filteredValue='';
+    bool dot = false;
+    int numAfterDot=0;
+
+    value.runes.forEach((int rune) {
+      var character = String.fromCharCode(rune);
+      if(character == '.' || character == ',') {
+        if(!dot) {
+          filteredValue += '.';
+          dot=true;
+        }
+      }else {
+        if(dot) {
+          int dotIndex = filteredValue.indexOf('.')+1;
+          int length = filteredValue.length+1;
+          if(length - dotIndex <= 2) {
+            filteredValue += character;
+          }
+        }else {
+          filteredValue += character;
+        }
+      }
+    });
+    setState(() {
+      _amountDot = dot;
+    }
+    );
+    return filteredValue;
+  }
+
+  bool isNumeric(String s) {
+    if(s == null) {
+      return false;
+    }
+    return double.parse(s, (e) => null) != null;
+  }
+
   void submitData() {
+
+    // if(_amount) {
+
+    // }
+
     print("-----------------------------------");
     print("Amount: $_amount");
     print("Currency: $_selectedCurrency");
