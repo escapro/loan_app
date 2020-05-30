@@ -16,12 +16,12 @@ class ContactModal {
 
     showMaterialModalBottomSheet(
         context: context,
-        enableDrag: true,
+        enableDrag: true,   
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         isDismissible: true,
-        duration: const Duration(milliseconds: 200),
+        // duration: const Duration(milliseconds: 200),
         builder: (context, scrollController) {
           return Container(
             child: Column(
@@ -65,7 +65,7 @@ class ContactModal {
                     )
                   },
                 ),
-                Divider(color: Constans.Grey),
+                Divider(color: Constans.LightGrey),
                 ListTile(
                   leading: const Icon(Icons.close),
                   title: const Text("Закрыть"),

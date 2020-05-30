@@ -35,7 +35,7 @@ class ExistingContactsState extends State<ExistingContacts> {
   @override
   Widget build(BuildContext context) {
     return MyAppBar(
-        title: "Существующие контакты",
+        title: "Сохраненные контакты",
         divider: false,
         actions: <Widget>[
           IconButton(
@@ -75,11 +75,10 @@ class ExistingContactsState extends State<ExistingContacts> {
                   },
                 )
               ),
-              Divider(height: 1, color: Constans.LightGrey),
+              Divider(height: 1, color: Constans.UltraLightGrey),
               searchItems.isEmpty == false ?
               Expanded(
                 child: ListView.builder(
-                  cacheExtent: 100,
                   itemCount: searchItems.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {

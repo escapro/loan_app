@@ -124,12 +124,11 @@ class ContactListState extends State<ContactList> {
                   },
                 ),
               ),
-              Divider(height: 1, color: Constans.LightGrey),
+              Divider(height: 1, color: Constans.UltraLightGrey),
               isSearching == false || contactsFiltered.isEmpty == false ?
               Expanded(
                 child: ListView.builder(
                   shrinkWrap: true,
-                  cacheExtent: 500,
                   itemCount: isSearching == true ? contactsFiltered.length : contacts.length,
                   itemBuilder: (context, index) {
                     Contact contact = isSearching == true ? contactsFiltered[index] : contacts[index];

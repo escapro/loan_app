@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                         actions: <Widget>[
                           IconButton(
                             icon: const Icon(Icons.search,
-                                size: 27, color: Constans.PrimaryColor),
+                                size: 25, color: Constans.PrimaryColor),
                             onPressed: () => {
                               Navigator.push(
                                 context,
@@ -64,7 +64,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           IconButton(
                             icon: const Icon(Icons.info_outline,
-                                size: 27, color: Constans.PrimaryColor),
+                                size: 25, color: Constans.PrimaryColor),
                             onPressed: () => {
                               Navigator.push(
                                 context,
@@ -77,7 +77,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           IconButton(
                             icon: const Icon(Icons.add_circle,
-                                size: 27, color: Constans.PrimaryColor),
+                                size: 25, color: Constans.PrimaryColor),
                             onPressed: () => {
                               Navigator.push(
                                 context,
@@ -118,9 +118,9 @@ class HomeScreen extends StatelessWidget {
       labelColor: Constans.PrimaryColor,
       unselectedLabelColor: Constans.Grey,
       tabs: const <Widget>[
-        const Tab(child: const Text("Все долги")),
-        const Tab(child: const Text("Взял в долг")),
-        const Tab(child: const Text("Дал в долг"))
+        const Tab(child: const Text("ВСЕ ДОЛГИ", style: TextStyle(fontWeight: FontWeight.bold))),
+        const Tab(child: const Text("ВЗЯЛ  ДОЛГ", style: TextStyle(fontWeight: FontWeight.bold))),
+        const Tab(child: const Text("ДАЛ В ДОЛГ", style: TextStyle(fontWeight: FontWeight.bold)))
       ],
     ));
   }

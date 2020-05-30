@@ -3,6 +3,7 @@ import 'package:Loan/components/LoanItem.dart';
 import 'package:Loan/constans.dart';
 import 'package:flutter/material.dart';
 import 'package:Loan/components/EmptyLoan.dart';
+import 'package:intl/intl.dart';
 
 class CurrencySelector extends StatefulWidget {
   final Function callback;
@@ -19,6 +20,7 @@ class CurrencySelectorState extends State<CurrencySelector> {
   List<List> _currencies = [
     ['RUB', 'Росийский рубль', '₽', 'ru'],
     ['USD', 'Доллар США', '\$', 'us'],
+    ['EUR', 'Евро', '', 'eu'],
     ['UAH', 'Украинская гривна', '₴', 'ua'],
     ['BYR', 'Белорусский рубль', 'Br', 'by'],
     ['KZT', 'Казахстанский тенге', '₸', 'kz'],
@@ -80,12 +82,11 @@ class CurrencySelectorState extends State<CurrencySelector> {
                   },
                 ),
               ),
-              Divider(height: 1, color: Constans.Grey),
+              Divider(height: 1, color: Constans.UltraLightGrey),
               searchItems.isEmpty == false
                   ? Expanded(
                       child: Scrollbar(
                         child: ListView.builder(
-                          cacheExtent: 100,
                           itemCount: searchItems.length,
                           itemBuilder: (context, index) {
                             return Container(
@@ -113,7 +114,7 @@ class CurrencySelectorState extends State<CurrencySelector> {
                                                         fontSize: 16)),
                                                 TextSpan(
                                                     text:
-                                                        '${searchItems[index][2]}',
+                                                        NumberFormat.simpleCurrency(name: '${searchItems[index][0]}').currencySymbol,
                                                     style: TextStyle(
                                                         fontSize: 20,
                                                         color: Colors.black38)),

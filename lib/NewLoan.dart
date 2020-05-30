@@ -24,8 +24,6 @@ class _NewLoanState extends State<NewLoan> {
   String _comment;
   BuildContext _context;
 
-  bool _amountDot;
-
   TextEditingController _amountController = TextEditingController();
 
   @override
@@ -42,8 +40,6 @@ class _NewLoanState extends State<NewLoan> {
       4: ["Emily", 1],
       5: ["Bryan", 1],
     };
-
-    _amountDot=false;
   }
 
   @override
@@ -157,8 +153,9 @@ class _NewLoanState extends State<NewLoan> {
                                 child: Icon(Icons.add, color: Constans.LightGrey),
                                 onTap: () {
                                   String value = _amountController.text;
-                                  value += '+';
-
+                                  if(value.split('').last != '+') {
+                                    value += '+';
+                                  }
                                   _amountController.value = TextEditingValue(
                                     text: value,
                                     selection: TextSelection.fromPosition(
@@ -168,7 +165,7 @@ class _NewLoanState extends State<NewLoan> {
                                 },
                               ) : null,
                               margin: const EdgeInsets.only(right: 10.0),
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.numberWithOptions(decimal: true),
                               onChanged: amountListener),
                           ),
                           Flexible(
@@ -385,27 +382,26 @@ class _NewLoanState extends State<NewLoan> {
     if(action == true) {
       FocusScope.of(context).requestFocus(new FocusNode());
     }
-   
-    // amountUnfocus();
+    amountUnfocus();
   }
 
   void amountUnfocus() {
 
     var value = _amountController.text;
-    var filteredValue='';
+    var filteredValue='0.0';
 
     var plusSlpitValue = value.split("+");
 
     if(plusSlpitValue.length > 1) {
       plusSlpitValue.forEach((valueItem) {
-        amountListener(valueItem);
-        // double a = double.parse(amountUnfocusFilter(valueItem));
-        // double b = double.parse(filteredValue);
-        // print(b);
-        filteredValue += valueItem;
+        if(valueItem.isNotEmpty) {
+          double a = double.parse(amountUnfocusFilter(valueItem)); 
+          double b = double.parse(filteredValue); 
+          filteredValue = amountUnfocusFilter((a+b).toStringAsFixed(2).toString());
+        }
       });
     }else {
-      amountListener(value);
+      // amountListener(value);
       filteredValue = amountUnfocusFilter(value);
     }
 
@@ -419,7 +415,7 @@ class _NewLoanState extends State<NewLoan> {
 
   amountUnfocusFilter(value) {
     var filteredValue = value;
-    if(_amountDot) {
+    if(value.split(".").length > 1) {
       if(value.split(".")[1] == '00') {
         filteredValue = value.replaceAll('.00', '');
       }else if(value.split(".")[1] == '0') {
@@ -436,13 +432,16 @@ class _NewLoanState extends State<NewLoan> {
   void amountListener(String v) {
 
     var value = v;
+    if (value == ''){
+      return;
+    }
     var filteredValue = '';
 
     if(value[0] == '.' || value[0] == ',') {
       return;
     }
 
-    filteredValue=_checkNumber();
+    filteredValue=_checkNumber(value);
 
     _amountController.value = TextEditingValue(
       text: filteredValue,
@@ -452,18 +451,27 @@ class _NewLoanState extends State<NewLoan> {
     );
   }
 
-  _checkNumber() {
-    String value = _amountController.text;
+  _checkNumber(String v) {
+    var value = v;
+    print(value);
     String filteredValue='';
     bool dot = false;
-    int numAfterDot=0;
+     
+     var qwe;
 
-    value.runes.forEach((int rune) {
+    var plusSlpitValue = value.split("+");
+    if(plusSlpitValue.length > 1) {
+      qwe = plusSlpitValue;
+    }else {
+      qwe = value.runes;
+    }
+  
+    qwe.forEach((int rune) {
       var character = String.fromCharCode(rune);
       if(character == '.' || character == ',') {
         if(!dot) {
-          filteredValue += '.';
           dot=true;
+          filteredValue += '.';
         }
       }else {
         if(dot) {
@@ -477,10 +485,7 @@ class _NewLoanState extends State<NewLoan> {
         }
       }
     });
-    setState(() {
-      _amountDot = dot;
-    }
-    );
+    setState(() {});
     return filteredValue;
   }
 
@@ -511,7 +516,7 @@ class _NewLoanState extends State<NewLoan> {
   Future<void> _showContactRepeatDialog({context, type}) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Этот контакт уже добавлен'),
